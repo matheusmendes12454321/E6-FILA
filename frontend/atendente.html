@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Atendente - E6-FILA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #94a3b8;
+        }
+
+        .btn-chamar {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 30px 50px;
+            font-size: 2rem;
+            font-weight: bold;
+            border-radius: 16px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+            transition: transform 0.1s, background-color 0.2s;
+        }
+
+        .btn-chamar:hover {
+            background-color: #2563eb;
+        }
+
+        .btn-chamar:active {
+            transform: scale(0.95);
+        }
+
+        #status-msg {
+            margin-top: 30px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            min-height: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Guichê de Atendimento</h1>
+
+    <button class="btn-chamar" onclick="chamarProxima()">
+        📢 Chamar Próxima Senha
+    </button>
+
+    <div id="status-msg"></div>
+
+    <script>
+        const API_URL = 'http://127.0.0.1:8000/api/senhas/chamar-proxima';
+
+        async function chamarProxima() {
+            const msgEl = document.getElementById('status-msg');
+            msgEl.innerText = 'Chamando...';
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST'
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    msgEl.innerText = `🔔 Senha Chamada: ${data.senha.codigo} (${data.senha.tipo.toUpperCase()})`;
+                    msgEl.style.color = '#38bdf8';
+                } else {
+                    msgEl.innerText = `⚠️ ${data.message || 'Nenhuma senha na fila.'}`;
+                    msgEl.style.color = '#f59e0b';
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                msgEl.innerText = '❌ Erro ao conectar com o servidor.';
+                msgEl.style.color = '#ef4444';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emissão de Senhas - Totem</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #94a3b8;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-bottom: 40px;
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            border: none;
+            padding: 30px 40px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+            color: #ffffff;
+            min-width: 250px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-comum {
+            background-color: #22c55e;
+        }
+
+        .btn-comum:hover {
+            background-color: #16a34a;
+        }
+
+        .btn-prioritaria {
+            background-color: #ef4444;
+        }
+
+        .btn-prioritaria:hover {
+            background-color: #dc2626;
+        }
+
+        /* Modal / Alerta de confirmação */
+        #feedback {
+            margin-top: 30px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            height: 40px;
+            color: #38bdf8;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Retire sua Senha</h1>
+    <p>Selecione o tipo de atendimento desejado:</p>
+
+    <div class="buttons-container">
+        <button class="btn btn-comum" onclick="gerarSenha('comum')">
+            Atendimento Comum
+        </button>
+
+        <button class="btn btn-prioritaria" onclick="gerarSenha('prioritaria')">
+            Atendimento Prioritário
+        </button>
+    </div>
+
+    <div id="feedback"></div>
+
+    <script>
+        const API_URL = 'http://127.0.0.1:8000/api/eventos';
+
+        async function gerarSenha(tipo) {
+            const feedbackEl = document.getElementById('feedback');
+            feedbackEl.innerText = 'Gerando senha...';
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ tipo: tipo })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    feedbackEl.innerText = `✅ Senha emitida: ${data.senha.codigo}`;
+                    feedbackEl.style.color = '#38bdf8';
+                } else {
+                    feedbackEl.innerText = `❌ Erro: ${data.message || 'Falha ao emitir'}`;
+                    feedbackEl.style.color = '#ef4444';
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                feedbackEl.innerText = '❌ Erro ao conectar com o servidor.';
+                feedbackEl.style.color = '#ef4444';
+            }
+
+            // Limpa a mensagem após 4 segundos
+            setTimeout(() => {
+                feedbackEl.innerText = '';
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
