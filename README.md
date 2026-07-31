@@ -14,7 +14,7 @@ O **E6-FILA** é um sistema integrado de hardware, firmware e software projetado
 
 ## 👥 Integrantes da Equipe (Equipe 06)
 
-* **[Seu Nome]** — Arquitetura de Software, API Backend (Laravel) e Banco de Dados.
+* **Matheus** — Arquitetura de Software, API Backend (Laravel) e Banco de Dados.
 * **Pethrus** — Suporte de Software, Firmware ESP32 e Interface Frontend.
 * **Kauã** — Projeto do Circuito Eletroeletrônico, Pinagem e Protótipo Físico.
 * **Jonas** — Construção da Maquete, Acabamento e Acessibilidade Física.
