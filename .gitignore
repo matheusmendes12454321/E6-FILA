@@ -1,0 +1,17 @@
+﻿# Dependencias e Ambientes
+.env
+/backend/vendor/
+/backend/node_modules/
+/backend/public/build/
+
+# Arquivos de IDE e Sistema
+.vscode/
+.idea/
+*.DS_Store
+Thumbs.db
+
+# Compilacao do ESP32
+*.elf
+*.bin
+*.hex
+.pio/
