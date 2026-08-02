@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Fila extends Model
 {
@@ -14,16 +13,8 @@ class Fila extends Model
 
     protected $fillable = [
         'nome',
-        'prefixo',
-        'ativa',
-        'politica_prioridade',
+        'sigla',
+        'prefixo', // <--- Deve estar liberado aqui
+        'descricao',
     ];
-
-    /**
-     * Uma Fila possui muitas Senhas.
-     */
-    public function senhas(): HasMany
-    {
-        return $this->hasMany(Senha::class);
-    }
 }

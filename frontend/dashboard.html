@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard do Gestor - E6-FILA</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: #0f172a; color: #f8fafc; padding: 40px; }
+        h1 { font-size: 2.2rem; margin-bottom: 10px; color: #38bdf8; }
+        p { color: #94a3b8; margin-bottom: 30px; }
+        .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+        .card { background-color: #1e293b; padding: 25px; border-radius: 16px; border: 1px solid #334155; }
+        .card-title { font-size: 0.9rem; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; }
+        .card-value { font-size: 3rem; font-weight: bold; margin-top: 10px; color: #f8fafc; }
+        .highlight { color: #38bdf8; }
+        .warning { color: #f59e0b; }
+        .success { color: #22c55e; }
+        .danger { color: #ef4444; }
+    </style>
+</head>
+<body>
+
+    <h1>📊 Dashboard de Gestão - E6-FILA</h1>
+    <p>Indicadores em tempo real do sistema de atendimento</p>
+
+    <div class="grid-cards">
+        <div class="card">
+            <div class="card-title">Pessoas em Espera</div>
+            <div id="em-espera" class="card-value warning">0</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Em Atendimento</div>
+            <div id="em-atendimento" class="card-value highlight">0</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Atendidos Hoje</div>
+            <div id="atendidos" class="card-value success">0</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Ausências / Pulos</div>
+            <div id="ausentes" class="card-value danger">0</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Espera Média (min)</div>
+            <div id="tempo-espera" class="card-value">0 min</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Atendimento Médio (min)</div>
+            <div id="tempo-atendimento" class="card-value">0 min</div>
+        </div>
+    </div>
+
+    <script>
+        const API_DASHBOARD = 'http://127.0.0.1:8000/api/dashboard';
+
+        async function carregarDashboard() {
+            try {
+                const response = await fetch(API_DASHBOARD);
+                const data = await response.json();
+                const ind = data.indicadores;
+
+                document.getElementById('em-espera').innerText = ind.em_espera;
+                document.getElementById('em-atendimento').innerText = ind.em_atendimento;
+                document.getElementById('atendidos').innerText = ind.atendidos_hoje;
+                document.getElementById('ausentes').innerText = ind.ausentes_hoje;
+                document.getElementById('tempo-espera').innerText = ind.tempo_espera_medio_min + 'm';
+                document.getElementById('tempo-atendimento').innerText = ind.tempo_atendimento_medio_min + 'm';
+            } catch (err) {
+                console.error('Erro ao carregar indicadores:', err);
+            }
+        }
+
+        carregarDashboard();
+        setInterval(carregarDashboard, 4000); // Atualiza a cada 4 segundos
+    </script>
+</body>
+</html>

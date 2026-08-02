@@ -3,139 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emissão de Senhas - Totem</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #0f172a;
-            color: #f8fafc;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            color: #94a3b8;
-        }
-
-        p {
-            font-size: 1.2rem;
-            color: #64748b;
-            margin-bottom: 40px;
-        }
-
-        .buttons-container {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .btn {
-            border: none;
-            padding: 30px 40px;
-            font-size: 1.8rem;
-            font-weight: bold;
-            border-radius: 16px;
-            cursor: pointer;
-            transition: transform 0.1s, opacity 0.2s;
-            color: #ffffff;
-            min-width: 250px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
-
-        .btn:active {
-            transform: scale(0.95);
-        }
-
-        .btn-comum {
-            background-color: #22c55e;
-        }
-
-        .btn-comum:hover {
-            background-color: #16a34a;
-        }
-
-        .btn-prioritaria {
-            background-color: #ef4444;
-        }
-
-        .btn-prioritaria:hover {
-            background-color: #dc2626;
-        }
-
-        /* Modal / Alerta de confirmação */
-        #feedback {
-            margin-top: 30px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            height: 40px;
-            color: #38bdf8;
-        }
-    </style>
+    <title>Totem de Senhas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
+<body class="bg-slate-900 text-white min-h-screen flex flex-col justify-between p-6">
 
-    <h1>Retire sua Senha</h1>
-    <p>Selecione o tipo de atendimento desejado:</p>
+    <header class="text-center py-4">
+        <h1 class="text-3xl font-extrabold tracking-wider text-blue-400">BEM-VINDO(A)</h1>
+        <p class="text-slate-400 text-sm mt-1">Selecione o tipo de atendimento para retirar sua senha</p>
+    </header>
 
-    <div class="buttons-container">
-        <button class="btn btn-comum" onclick="gerarSenha('comum')">
-            Atendimento Comum
-        </button>
-
-        <button class="btn btn-prioritaria" onclick="gerarSenha('prioritaria')">
-            Atendimento Prioritário
-        </button>
+    <div id="cardSenhaEmitida" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-white text-slate-800 rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl border-4 border-blue-500 animate-bounce-short">
+            <span class="text-xs font-bold text-slate-400 tracking-widest uppercase">Sua Senha é</span>
+            <div id="codigoEmitido" class="text-6xl font-black text-blue-600 my-4 tracking-tight">---</div>
+            <div id="tipoEmitido" class="text-sm font-semibold uppercase text-slate-500 bg-slate-100 py-1 px-3 rounded-full inline-block">--</div>
+            <p class="text-xs text-slate-400 mt-6">Por favor, aguarde a chamada no painel.</p>
+        </div>
     </div>
 
-    <div id="feedback"></div>
+    <main class="max-w-2xl w-full mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+        <button onclick="gerarSenha('comum')" 
+            class="bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 hover:border-blue-500 rounded-3xl p-8 flex flex-col items-center justify-center gap-4 transition-all duration-300 hover:scale-105 shadow-xl group">
+            <div class="bg-blue-500/10 text-blue-400 p-5 rounded-2xl group-hover:bg-blue-500 group-hover:text-white transition-all">
+                <i class="fa-solid fa-user text-4xl"></i>
+            </div>
+            <div class="text-center">
+                <span class="text-xl font-bold block">Atendimento Comum</span>
+                <span class="text-xs text-slate-400 mt-1 block">Fila convencional</span>
+            </div>
+        </button>
+
+        <button onclick="gerarSenha('prioritaria')" 
+            class="bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 hover:border-amber-500 rounded-3xl p-8 flex flex-col items-center justify-center gap-4 transition-all duration-300 hover:scale-105 shadow-xl group">
+            <div class="bg-amber-500/10 text-amber-400 p-5 rounded-2xl group-hover:bg-amber-500 group-hover:text-white transition-all">
+                <i class="fa-solid fa-hands-holding-child text-4xl"></i>
+            </div>
+            <div class="text-center">
+                <span class="text-xl font-bold block text-amber-400">Atendimento Prioritário</span>
+                <span class="text-xs text-slate-400 mt-1 block">Gestantes, idosos e PCD</span>
+            </div>
+        </button>
+    </main>
+
+    <footer class="text-center text-xs text-slate-500 py-2">
+        Sistema de Gerenciamento de Filas &bull; Terminal Totem
+    </footer>
 
     <script>
-        const API_URL = 'http://127.0.0.1:8000/api/eventos';
+        const API_URL = 'http://127.0.0.1:8000/api';
 
         async function gerarSenha(tipo) {
-            const feedbackEl = document.getElementById('feedback');
-            feedbackEl.innerText = 'Gerando senha...';
-
             try {
-                const response = await fetch(API_URL, {
+                const response = await fetch(`${API_URL}/eventos`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ tipo: tipo })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tipo })
                 });
 
                 const data = await response.json();
 
                 if (response.ok) {
-                    feedbackEl.innerText = `✅ Senha emitida: ${data.senha.codigo}`;
-                    feedbackEl.style.color = '#38bdf8';
+                    exibirSenha(data.senha.codigo, data.senha.tipo);
                 } else {
-                    feedbackEl.innerText = `❌ Erro: ${data.message || 'Falha ao emitir'}`;
-                    feedbackEl.style.color = '#ef4444';
+                    alert('Erro ao emitir senha: ' + (data.message || 'Falha no servidor'));
                 }
             } catch (error) {
-                console.error('Erro:', error);
-                feedbackEl.innerText = '❌ Erro ao conectar com o servidor.';
-                feedbackEl.style.color = '#ef4444';
+                alert('Erro de conexão ao tentar emitir senha.');
             }
+        }
 
-            // Limpa a mensagem após 4 segundos
+        function exibirSenha(codigo, tipo) {
+            document.getElementById('codigoEmitido').textContent = codigo;
+            document.getElementById('tipoEmitido').textContent = tipo === 'prioritaria' ? 'Prioritária' : 'Comum';
+            
+            const modal = document.getElementById('cardSenhaEmitida');
+            modal.classList.remove('hidden');
+
+            // Esconde o modal automaticamente após 4 segundos
             setTimeout(() => {
-                feedbackEl.innerText = '';
+                modal.classList.add('hidden');
             }, 4000);
         }
     </script>

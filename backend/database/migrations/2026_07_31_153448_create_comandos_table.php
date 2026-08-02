@@ -10,10 +10,10 @@ return new class extends Migration
     {
         Schema::create('comandos', function (Blueprint $table) {
             $table->id();
-            $table->string('device_id')->default('E6-FILA');
-            $table->string('acao');
-            $table->json('parametros')->nullable();
-            $table->enum('status', ['pendente', 'executado', 'falhou'])->default('pendente');
+            $table->unsignedBigInteger('device_id')->nullable();
+            $table->string('acao'); // ex: 'sinalizar_chamada'
+            $table->text('parametros')->nullable();
+            $table->string('status')->default('pendente'); // pendente, executado, falhou
             $table->text('retorno')->nullable();
             $table->timestamps();
         });

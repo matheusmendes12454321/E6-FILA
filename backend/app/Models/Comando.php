@@ -20,6 +20,6 @@ class Comando extends Model
     ];
 
     protected $casts = [
-        'parametros' => 'array', // Converte automaticamente o JSON do banco para array no PHP
+        'parametros' => 'array',
     ];
 }

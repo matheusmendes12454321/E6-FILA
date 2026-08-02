@@ -7,9 +7,7 @@ use App\Models\Senha;
 
 class PainelController extends Controller
 {
-    /**
-     * Exibe a senha atual chamada e o histórico recente para a tela do Painel/TV.
-     */
+    
     public function exibirAtual()
     {
         $senhaAtual = Senha::where('status', 'chamada')

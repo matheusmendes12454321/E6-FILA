@@ -31,9 +31,6 @@ class Senha extends Model
         'fim_em' => 'datetime',
     ];
 
-    /**
-     * Uma Senha pertence a uma Fila.
-     */
     public function fila(): BelongsTo
     {
         return $this->belongsTo(Fila::class);
